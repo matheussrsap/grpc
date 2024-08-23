@@ -176,10 +176,9 @@ template <typename Response>
 void ProtoServerReflectionBackend::FillFileDescriptorResponse(
     const protobuf::FileDescriptor* file_desc, Response* response,
     std::unordered_set<std::string>* seen_files) const {
-  if (seen_files->find(file_desc->name()) != seen_files->end()) {
+  if (!seen_files->emplace(file_desc->name()).second) {
     return;
   }
-  seen_files->insert(file_desc->name());
 
   protobuf::FileDescriptorProto file_desc_proto;
   std::string data;
